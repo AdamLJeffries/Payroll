@@ -2,44 +2,31 @@
 {
     internal class Program
     {
-
-        static void Main(string[] args)
+        public static void Main(string[] Payroll)
         {
-            if (args is null)
-            {
-                throw new ArgumentNullException(nameof(args));
-            }
-
-            int num01;
-            //hours worked    
-            int num02;
-            //hourly wage
-            int num03;
-            //time and a half payint overtime;     //amount paid with overtime hours int main()
+           
             {
 
-                Console.Write("How much do you make an hour?");
-                num01 = Convert.ToInt32(Console.ReadLine());
-
-                Console.Write("How many hours did you work this week?");
-                num02 = Convert.ToInt32(Console.ReadLine());
-
-                Console.Write("How many hours did you work this week over 40?");
-                num03 = Convert.ToInt32(Console.ReadLine());
-
-                int regularPay;  //amount made if worked 40hrs    
-                int extraPay;    //amount made if worked anything over 40hrs    
-                regularPay = (num01 * 40);
-                extraPay = (num03 - 40) * num02;
-                _ = num01 + (num01 / 2);
-
-                if (num01 <= 40)
+                Console.Write("What is your hourly rate?");
+                int v1 = Convert.ToInt32(Console.ReadLine());
+                int hours = v1;
+                Console.WriteLine("How many hours did you work?");
+                int v2 = Convert.ToInt32(Console.ReadLine());
+                Console.Write("How many hours did you work over 40 this week?");
+                int v3 = Convert.ToInt32(Console.ReadLine());
+                int grossPay = (v1 * v2);
+                 
+                int v5 = v3 * v2 / 2 + v3 * v2;
+                int overtimepay = v5 + grossPay;
+                bool v = hours <= 40;
+                if (v)
                 {
-                    Console.WriteLine("Your wage is {0}.", regularPay);
+                    Console.WriteLine("Your wage is " + grossPay);
                 }
                 else
                 {
-                    Console.WriteLine("Your extra wage is {0}.", extraPay);
+
+                    Console.WriteLine(value: "Your extra wage is " + overtimepay);
 
                 }
 
