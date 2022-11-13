@@ -1,4 +1,6 @@
-﻿namespace Payroll
+﻿using System.Linq;
+
+namespace Payroll
 {
     internal class Program
     {
@@ -6,45 +8,66 @@
         {
            
             {
+                //TODO: Figure out if you can legally round an employee's money down.
+
                 bool stayOpen = true;
                 
                 do
                 {
                     Console.WriteLine("What is your hourly rate?");
-
                     //TODO: Fix for case where user would enter "Twenty dollars an hour"
                     double hourlyRate = Convert.ToDouble(Console.ReadLine().Replace("$", ""));
-                    Console.WriteLine("How many Regular Time hours did you work?");
-                    double regularTime = Convert.ToDouble(Console.ReadLine());
-                    Console.WriteLine("How many Overtime hours did you work his week?");
-                    double overTime = Convert.ToDouble(Console.ReadLine());
+
+                    Console.WriteLine("How many hours did you work?");
+                    double time = Convert.ToDouble(Console.ReadLine());
+
+                    Console.WriteLine("When does overtime kick in?");
+                    double overTimeHours = Convert.ToDouble(Console.ReadLine());
+
+                    double workedOverTime = Calc.CalcWorkedOT(time, overTimeHours);
+                    double regularTime = Calc.CalcRegTime(time, workedOverTime, overTimeHours);
+
                     double grossPay = (hourlyRate * regularTime);
 
-                    double overtimePay = (hourlyRate * overTime / 2) + hourlyRate * overTime;
+                    double overtimePay = (hourlyRate * workedOverTime / 2) + hourlyRate * workedOverTime;
                     double OT = overtimePay + grossPay;
 
-                    switch (overTime)
+                    switch (regularTime)
                     {
-                        case >= 0:
-                            Console.WriteLine($"Your gross pay and overtime will be in the amount of ${OT}");
+                        case >= 40:
+                            workedOverTime = Math.Round(workedOverTime, 2, MidpointRounding.AwayFromZero);
+                            Console.WriteLine($"You have worked {regularTime} Regular time hours and {workedOverTime} Overtime hours");
                             break;
                         default:
+                            Console.WriteLine($"You have worked {regularTime} hours");
+                            break;
+                    }
+
+                    switch (workedOverTime)
+                    {
+                        case >= 0:
+                            OT = Math.Round(OT, 2, MidpointRounding.AwayFromZero);
+                            Console.WriteLine($"Your gross pay and overtime will be in the amount of ${OT}");                       
+                            break;
+                        default:
+                            grossPay = Math.Round(grossPay, 2, MidpointRounding.AwayFromZero);
                             Console.WriteLine($"Your gross pay is + {grossPay}");
                             break;
                     }
 
                     Console.WriteLine("\r\nWould you like to calculate another payroll?");
                     string answer = Console.ReadLine().ToLower();
+                    List<string> exitCmds = new List<string>() { "exit", "terminate", "stop", "quit", "end", "no"};
 
-                    if (answer != "yes") // TODO: Better user answer acceptance
+                    if (exitCmds.Any(s => answer.Contains(s)))
                     {
                         stayOpen = false;
                     }
                     else
                     {
-                        Console.WriteLine("\r\n========================================");
+                        Console.WriteLine("\r\n=========================================");
                         Console.WriteLine("========Dolla Dolla Bills, Yall!=========");
-                        Console.WriteLine("========================================\r\n");
+                        Console.WriteLine("=========================================\r\n");
                     }
                 } while (stayOpen);
 
