@@ -32,16 +32,7 @@ namespace Payroll
                     double overtimePay = (hourlyRate * workedOverTime / 2) + hourlyRate * workedOverTime;
                     double OT = overtimePay + grossPay;
 
-                    switch (regularTime)
-                    {
-                        case >= 40:
-                            workedOverTime = Math.Round(workedOverTime, 2, MidpointRounding.AwayFromZero);
-                            Console.WriteLine($"You have worked {regularTime} Regular time hours and {workedOverTime} Overtime hours");
-                            break;
-                        default:
-                            Console.WriteLine($"You have worked {regularTime} hours");
-                            break;
-                    }
+                    Print.PrintRegularTime(regularTime, workedOverTime);
 
                     switch (workedOverTime)
                     {
